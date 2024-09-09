@@ -34,7 +34,7 @@ public class FileController {
         }
         attachment = fileService.saveAttachment(file, token);
         logger.info("File uploaded successfully: {}", file.getOriginalFilename());
-        String downloadUrl = UrlUtil.downloadUrl(attachment.getId());
+        String downloadUrl = UrlUtil.getFileDownloadUr(attachment.getId());
         logger.debug("Generated download URL: {}", downloadUrl);
         return new ResponseData(attachment.getFileName(), downloadUrl, file.getContentType(), file.getSize());
     }
