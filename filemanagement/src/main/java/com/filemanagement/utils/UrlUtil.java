@@ -4,7 +4,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 public class UrlUtil {
 
-    public static String getFileDownloadUr(String attachmentId){
+    public static String getFileDownloadUrl(String attachmentId){
         return ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/download/")
                 .path(attachmentId)
