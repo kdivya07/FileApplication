@@ -28,4 +28,5 @@ public class Attachment {
         this.fileType = fileType;
         this.data = data;
     }
+
 }
