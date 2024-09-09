@@ -1,7 +1,7 @@
 package com.filemanagement.services;
 
 import com.filemanagement.constants.ErrorConstants;
-import com.filemanagement.constants.UrlConstants;
+import com.filemanagement.utils.UrlUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class ValidationServiceImpl implements ValidationService {
 
     public boolean isTokenValid(String token) throws RestClientException {
         logger.debug("Validating token: {}", token);
-        String url = UrlConstants.VALIDATE_API_URL + token;
+        String url = UrlUtil.VALIDATE_API_URL + token;
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
 
         if (response.getStatusCode() == HttpStatus.OK) {
@@ -33,7 +33,7 @@ public class ValidationServiceImpl implements ValidationService {
             return false;
         } else {
             logger.error("Invalid token response status: {}", response.getStatusCode());
-            throw new RestClientException(ErrorConstants.ERROR_TOKEN_INVALID + response.getStatusCode());
+            throw new RestClientException(ErrorConstants.UNKNOWN_ERROR + response.getStatusCode());
         }
     }
 

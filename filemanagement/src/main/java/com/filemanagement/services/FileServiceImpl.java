@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -23,9 +22,6 @@ public class FileServiceImpl implements FileService {
     private FileRepository fileRepository;
 
     @Autowired
-    private RestTemplate restTemplate;
-
-    @Autowired
     private ValidationServiceImpl validationServiceImpl;
 
     @Override
@@ -33,14 +29,14 @@ public class FileServiceImpl implements FileService {
         logger.debug("Entering saveAttachment with fileName: {} and token: {}", file.getOriginalFilename(), token);
         if (!validationServiceImpl.isTokenValid(token)) {
             logger.warn("Token validation failed for token: {}", token);
-            throw new UnauthorizedException(ErrorConstants.ERROR_UNAUTHORIZED);
+            throw new UnauthorizedException(ErrorConstants.UNAUTHORIZED);
         }
 
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
         if (fileName.contains("..")) {
             logger.error("Filename contains invalid path name: {}", fileName);
-            throw new IllegalArgumentException(ErrorConstants.ERROR_INVALID_FILENAME + fileName);
+            throw new IllegalArgumentException(ErrorConstants.INVALID_FILENAME + fileName);
         }
         try {
             Attachment attachment = new Attachment(fileName, file.getContentType(), file.getBytes());
@@ -64,15 +60,15 @@ public class FileServiceImpl implements FileService {
         logger.debug("Entering getAttachment for fileId: {} and token: {}", fileId, token);
         if (!validationServiceImpl.isTokenValid(token)) {
             logger.warn("Token validation failed for token:{}", token);
-            throw new UnauthorizedException(ErrorConstants.ERROR_UNAUTHORIZED);
+            throw new UnauthorizedException(ErrorConstants.UNAUTHORIZED);
         }
         try {
-            Attachment attachment = fileRepository.findById(fileId).orElseThrow(() -> new Exception(ErrorConstants.ERROR_FILE_NOT_FOUND + fileId));
+            Attachment attachment = fileRepository.findById(fileId).orElseThrow(() -> new Exception(ErrorConstants.FILE_NOT_FOUND + fileId));
             logger.info("Successfully saved file with id:{}", fileId);
             return attachment;
         } catch (Exception e) {
             logger.error("Error downloading file with id: {}", fileId);
-            throw new RuntimeException(ErrorConstants.ERROR_FILE_NOT_FOUND + fileId, e);
+            throw new RuntimeException(ErrorConstants.FILE_NOT_FOUND + fileId, e);
         } finally {
             logger.debug("Exiting getAttachment.");
         }
