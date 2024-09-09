@@ -1,6 +1,6 @@
 package com.filemanagement.rest;
 
-import com.filemanagement.constants.UrlConstants;
+import com.filemanagement.utils.UrlUtil;
 import com.filemanagement.entities.Attachment;
 import com.filemanagement.model.ResponseData;
 import com.filemanagement.services.FileService;
@@ -34,9 +34,9 @@ public class FileController {
         }
         attachment = fileService.saveAttachment(file, token);
         logger.info("File uploaded successfully: {}", file.getOriginalFilename());
-        String DOWNLOAD_URL = UrlConstants.DOWNLOAD_URL(attachment.getId());
-        logger.debug("Generated download URL: {}", DOWNLOAD_URL);
-        return new ResponseData(attachment.getFileName(), DOWNLOAD_URL, file.getContentType(), file.getSize());
+        String downloadUrl = UrlUtil.downloadUrl(attachment.getId());
+        logger.debug("Generated download URL: {}", downloadUrl);
+        return new ResponseData(attachment.getFileName(), downloadUrl, file.getContentType(), file.getSize());
     }
 
     @GetMapping("/download/{fileId}")
