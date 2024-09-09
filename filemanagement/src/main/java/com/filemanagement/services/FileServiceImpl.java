@@ -67,7 +67,7 @@ public class FileServiceImpl implements FileService {
             throw new UnauthorizedException(ErrorConstants.ERROR_UNAUTHORIZED);
         }
         try {
-            Attachment attachment = fileRepository.findById(fileId).orElseThrow(() -> new Exception("File not found with Id: " + fileId));
+            Attachment attachment = fileRepository.findById(fileId).orElseThrow(() -> new Exception(ErrorConstants.ERROR_FILE_NOT_FOUND + fileId));
             logger.info("Successfully saved file with id:{}", fileId);
             return attachment;
         } catch (Exception e) {
