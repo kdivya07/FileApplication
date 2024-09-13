@@ -4,6 +4,7 @@ import com.filemanagement.entities.Attachment;
 import com.filemanagement.constants.ErrorConstants;
 import com.filemanagement.exceptions.UnauthorizedException;
 import com.filemanagement.repositories.FileRepository;
+import jakarta.persistence.GeneratedValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @Service
 public class FileServiceImpl implements FileService {
@@ -39,7 +41,8 @@ public class FileServiceImpl implements FileService {
             throw new IllegalArgumentException(ErrorConstants.INVALID_FILENAME + fileName);
         }
         try {
-            Attachment attachment = new Attachment(fileName, file.getContentType(), file.getBytes());
+            String fileId = UUID.randomUUID().toString();
+            Attachment attachment = new Attachment(fileId, fileName, file.getContentType(), file.getBytes());
             Attachment savedAttachment = fileRepository.save(attachment);
             logger.info("Successfully saved file: {}", fileName);
             return savedAttachment;

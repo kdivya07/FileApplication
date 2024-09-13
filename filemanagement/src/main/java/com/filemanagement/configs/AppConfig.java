@@ -15,6 +15,6 @@ public class AppConfig {
 
     @Bean
     public Attachment attachment() {
-        return new Attachment();
+        return new Attachment( "fileId", "file.txt", "text/plain", "file content".getBytes());
     }
 }
